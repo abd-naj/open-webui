@@ -160,4 +160,5 @@ type SessionUser = {
 	name: string;
 	role: string;
 	profile_image_url: string;
+	models: any;
 };

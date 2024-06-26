@@ -101,6 +101,7 @@ export const getUsers = async (token: string) => {
 	})
 		.then(async (res) => {
 			if (!res.ok) throw await res.json();
+			console.log(res)
 			return res.json();
 		})
 		.catch((err) => {
@@ -111,6 +112,12 @@ export const getUsers = async (token: string) => {
 
 	if (error) {
 		throw error;
+	}
+	console.log(res)
+	if (res) {
+		for (let user of res){
+			user.models = JSON.parse(user.models || '[]')
+		}
 	}
 
 	return res ? res : [];

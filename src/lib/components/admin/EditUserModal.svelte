@@ -6,6 +6,7 @@
 
 	import { updateUserById } from '$lib/apis/users';
 	import Modal from '../common/Modal.svelte';
+	import ModelSelector from "$lib/components/chat/ModelSelector.svelte";
 
 	const i18n = getContext('i18n');
 	const dispatch = createEventDispatcher();
@@ -13,12 +14,14 @@
 	export let show = false;
 	export let selectedUser;
 	export let sessionUser;
+	export let selectedModels;
 
 	let _user = {
 		profile_image_url: '',
 		name: '',
 		email: '',
-		password: ''
+		password: '',
+		models: ''
 	};
 
 	const submitHandler = async () => {
@@ -135,6 +138,11 @@
 								/>
 							</div>
 						</div>
+
+						<div class="flex flex-col overflow-hidden w-full">
+							<ModelSelector bind:value={_user.models} />
+						</div>
+
 					</div>
 
 					<div class="flex justify-end pt-3 text-sm font-medium">

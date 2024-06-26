@@ -94,6 +94,7 @@ export const getSessionUser = async (token: string) => {
 	})
 		.then(async (res) => {
 			if (!res.ok) throw await res.json();
+			console.log(res);
 			return res.json();
 		})
 		.catch((err) => {
