@@ -6,6 +6,9 @@
 
 	import { updateUserById } from '$lib/apis/users';
 	import Modal from '../common/Modal.svelte';
+	import ModelSelector from "$lib/components/chat/ModelSelector.svelte";
+	import {models} from "$lib/stores";
+	import MultiSelector from "$lib/components/chat/ModelSelector/MultiSelector.svelte";
 
 	const i18n = getContext('i18n');
 	const dispatch = createEventDispatcher();
@@ -13,15 +16,18 @@
 	export let show = false;
 	export let selectedUser;
 	export let sessionUser;
-
+	// export let selectedModels;
+	$: selectedModelsx = [];
 	let _user = {
 		profile_image_url: '',
 		name: '',
 		email: '',
-		password: ''
+		password: '',
+		models: ''
 	};
 
 	const submitHandler = async () => {
+		_user.models = JSON.stringify(selectedModelsx);
 		const res = await updateUserById(localStorage.token, selectedUser.id, _user).catch((error) => {
 			toast.error(error);
 		});
@@ -38,6 +44,11 @@
 			_user.password = '';
 		}
 	});
+	 function handleSelectionChange(event) {
+		 console.log('models changed');
+		selectedModelsx = event.detail;
+		console.log('Selected models:', selectedModelsx);
+	  }
 </script>
 
 <Modal size="sm" bind:show>
@@ -135,6 +146,20 @@
 								/>
 							</div>
 						</div>
+
+						<div class="flex flex-col overflow-hidden w-full border-2">
+							<!--<ModelSelector bind:value={_user.models} />-->
+							 <MultiSelector
+								items={$models.map((model) => ({
+										value: model.id,
+										label: model.name,
+									}))}
+								bind:values={_user.models}
+								placeholder="Select models"
+								on:change={handleSelectionChange}
+							  />
+						</div>
+
 					</div>
 
 					<div class="flex justify-end pt-3 text-sm font-medium">

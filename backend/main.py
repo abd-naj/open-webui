@@ -94,6 +94,7 @@ from config import (
     SEARCH_QUERY_PROMPT_LENGTH_THRESHOLD,
     TOOLS_FUNCTION_CALLING_PROMPT_TEMPLATE,
     AppConfig,
+    ENABLE_MODEL_FILTER_BY_USER
 )
 from constants import ERROR_MESSAGES
 
@@ -148,6 +149,8 @@ app.state.config.ENABLE_MODEL_FILTER = ENABLE_MODEL_FILTER
 app.state.config.MODEL_FILTER_LIST = MODEL_FILTER_LIST
 
 app.state.config.WEBHOOK_URL = WEBHOOK_URL
+
+app.state.config.ENABLE_MODEL_FILTER_BY_USER = ENABLE_MODEL_FILTER_BY_USER
 
 
 app.state.config.TASK_MODEL = TASK_MODEL
@@ -682,6 +685,17 @@ async def get_models(user=Depends(get_verified_user)):
                 )
             )
             return {"data": models}
+
+    if app.state.config.ENABLE_MODEL_FILTER_BY_USER:
+        if user.role == "user":
+            # Filtering models based on user models
+            user_models = user.models
+            # print(models)
+            # print(user_models)
+            filtered_user_models = [model for model in models if model['name'] in user_models]
+
+            logging.warning('models', filtered_user_models)
+            return {"data": filtered_user_models}
 
     return {"data": models}
 

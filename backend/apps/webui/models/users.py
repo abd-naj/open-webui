@@ -27,6 +27,7 @@ class User(Model):
     api_key = CharField(null=True, unique=True)
     settings = JSONField(null=True)
     info = JSONField(null=True)
+    models = CharField()
 
     class Meta:
         database = DB
@@ -52,6 +53,7 @@ class UserModel(BaseModel):
     api_key: Optional[str] = None
     settings: Optional[UserSettings] = None
     info: Optional[dict] = None
+    models: str
 
 
 ####################
@@ -69,6 +71,7 @@ class UserUpdateForm(BaseModel):
     email: str
     profile_image_url: str
     password: Optional[str] = None
+    models:   Optional[str] = '[]'
 
 
 class UsersTable:
@@ -81,6 +84,7 @@ class UsersTable:
         id: str,
         name: str,
         email: str,
+        models: str,
         profile_image_url: str = "/user.png",
         role: str = "pending",
     ) -> Optional[UserModel]:
@@ -94,6 +98,7 @@ class UsersTable:
                 "last_active_at": int(time.time()),
                 "created_at": int(time.time()),
                 "updated_at": int(time.time()),
+                "models": models,
             }
         )
         result = User.create(**user.model_dump())

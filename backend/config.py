@@ -597,6 +597,9 @@ MODEL_FILTER_LIST = PersistentConfig(
 WEBHOOK_URL = PersistentConfig(
     "WEBHOOK_URL", "webhook_url", os.environ.get("WEBHOOK_URL", "")
 )
+ENABLE_MODEL_FILTER_BY_USER = PersistentConfig(
+    "ENABLE_MODEL_FILTER_BY_USER", "enable_model_filter_by_user", os.environ.get("ENABLE_MODEL_FILTER_BY_USER", "")
+)
 
 ENABLE_ADMIN_EXPORT = os.environ.get("ENABLE_ADMIN_EXPORT", "True").lower() == "true"
 

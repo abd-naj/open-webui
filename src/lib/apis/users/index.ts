@@ -101,6 +101,7 @@ export const getUsers = async (token: string) => {
 	})
 		.then(async (res) => {
 			if (!res.ok) throw await res.json();
+			console.log(res)
 			return res.json();
 		})
 		.catch((err) => {
@@ -111,6 +112,12 @@ export const getUsers = async (token: string) => {
 
 	if (error) {
 		throw error;
+	}
+	console.log(res)
+	if (res) {
+		for (let user of res){
+			user.models = JSON.parse(user.models || '[]')
+		}
 	}
 
 	return res ? res : [];
@@ -300,9 +307,11 @@ type UserUpdateForm = {
 	email: string;
 	name: string;
 	password: string;
+	models: string;
 };
 
 export const updateUserById = async (token: string, userId: string, user: UserUpdateForm) => {
+	console.log(user)
 	let error = null;
 
 	const res = await fetch(`${WEBUI_API_BASE_URL}/users/${userId}/update`, {
@@ -315,7 +324,8 @@ export const updateUserById = async (token: string, userId: string, user: UserUp
 			profile_image_url: user.profile_image_url,
 			email: user.email,
 			name: user.name,
-			password: user.password !== '' ? user.password : undefined
+			password: user.password !== '' ? user.password : undefined,
+			models: user.models ? user.models : '[]',
 		})
 	})
 		.then(async (res) => {
