@@ -690,8 +690,8 @@ async def get_models(user=Depends(get_verified_user)):
         if user.role == "user":
             # Filtering models based on user models
             user_models = user.models
-            print(models)
-            print(user_models)
+            # print(models)
+            # print(user_models)
             filtered_user_models = [model for model in models if model['name'] in user_models]
 
             logging.warning('models', filtered_user_models)
