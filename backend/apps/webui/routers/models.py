@@ -9,7 +9,7 @@ from apps.webui.models.models import Models, ModelModel, ModelForm, ModelRespons
 
 from utils.utils import get_verified_user, get_admin_user
 from constants import ERROR_MESSAGES
-
+import logging
 router = APIRouter()
 
 ###########################
@@ -19,6 +19,9 @@ router = APIRouter()
 
 @router.get("/", response_model=List[ModelResponse])
 async def get_models(user=Depends(get_verified_user)):
+    print('router/models')
+    logging.warning(user)
+    logging.warning(get_verified_user)
     return Models.get_all_models()
 
 
