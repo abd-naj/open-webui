@@ -278,6 +278,9 @@ async def get_function_call_response(messages, tool_id, template, task_model_id,
 
 class ChatCompletionMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
+        user = Depends(get_verified_user)
+        print('backend/main.py: 282')
+        print(user)
         return_citations = False
 
         if request.method == "POST" and (
@@ -291,11 +294,19 @@ class ChatCompletionMiddleware(BaseHTTPMiddleware):
             # Decode body to string
             body_str = body.decode("utf-8")
             # Parse string to JSON
+            print('backend/main.py: 294')
+            print(body_str)
             data = json.loads(body_str) if body_str else {}
 
             user = get_current_user(
                 get_http_authorization_cred(request.headers.get("Authorization"))
             )
+            if not data['model'] in user.models:
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Incorrect username or password",
+                    headers={"WWW-Authenticate": "Basic"},
+                )
 
             # Remove the citations from the body
             return_citations = data.get("citations", False)
