@@ -294,18 +294,17 @@ class ChatCompletionMiddleware(BaseHTTPMiddleware):
             # Decode body to string
             body_str = body.decode("utf-8")
             # Parse string to JSON
-            print('backend/main.py: 294')
-            print(body_str)
             data = json.loads(body_str) if body_str else {}
 
             user = get_current_user(
                 get_http_authorization_cred(request.headers.get("Authorization"))
             )
-            if not data['model'] in user.models:
-                raise HTTPException(
-                    status_code=status.HTTP_401_UNAUTHORIZED,
-                    detail="Incorrect username or password",
-                    headers={"WWW-Authenticate": "Basic"},
+            print(user.models)
+            if data['model'] not in user.models:
+                print('you dont have permission')
+                return JSONResponse(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    content=ERROR_MESSAGES.ACCESS_MODEL,
                 )
 
             # Remove the citations from the body

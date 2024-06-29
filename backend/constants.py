@@ -50,6 +50,7 @@ class ERROR_MESSAGES(str, Enum):
 
     UNAUTHORIZED = "401 Unauthorized"
     ACCESS_PROHIBITED = "You do not have permission to access this resource. Please contact your administrator for assistance."
+    ACCESS_MODEL = "You do not have permission to use this model. Please refresh your page and try chat again or contact your administrator for assistance."
     ACTION_PROHIBITED = (
         "The requested action has been restricted as a security measure."
     )
