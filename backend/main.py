@@ -299,12 +299,11 @@ class ChatCompletionMiddleware(BaseHTTPMiddleware):
             user = get_current_user(
                 get_http_authorization_cred(request.headers.get("Authorization"))
             )
-            print(user.models)
             if data['model'] not in user.models:
                 print('you dont have permission')
                 return JSONResponse(
                     status_code=status.HTTP_403_FORBIDDEN,
-                    content=ERROR_MESSAGES.ACCESS_MODEL,
+                    content={"detail": ERROR_MESSAGES.ACCESS_MODEL},
                 )
 
             # Remove the citations from the body
